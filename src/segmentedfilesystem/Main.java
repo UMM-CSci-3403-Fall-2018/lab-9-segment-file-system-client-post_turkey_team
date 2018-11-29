@@ -37,8 +37,6 @@ public class Main {
 
     }
 
-}
-
 public class Process {
 
 boolean a1Finished = false;
@@ -49,5 +47,14 @@ ArrayList<Integer> A1 = new ArrayList<Integer>();
 ArrayList<Integer> A2 = new ArrayList<Integer>();
 ArrayList<Integer> A3 = new ArrayList<Integer>();
 
+
+//byte arraytest[] = dpIN.getData();
+
+/*switch (dpIN.getData()) {
+ case 0:
+
+    break;
+}*/
+}
 
 }
