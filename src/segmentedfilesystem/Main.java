@@ -10,45 +10,44 @@ import java.util.Arrays;
 
 
 public class Main {
-/*
-https://docs.oracle.com/javase/7/docs/api/java/net/DatagramPacket.html
+// https://www.geeksforgeeks.org/java-net-datagramsocket-class-java/
 
-https://docs.oracle.com/javase/7/docs/api/java/net/DatagramSocket.html#receive(java.net.DatagramPacket)
-
-https://docs.oracle.com/javase/7/docs/api/java/net/DatagramSocketImpl.html
-
-https://www.geeksforgeeks.org/java-net-datagramsocket-class-java/
-*/
-    public static void main(String[] args) throws exception {
+    public static void main(String[] args) throws IOException {
       //Datagram socket constructor
-      DatagramSocket socket = new DatagramSocket();
-      InetAddress address = "heartofgold.morris.umn.edu"
       int port = 6014;
+      DatagramSocket socket = new DatagramSocket(port);
+      InetAddress address = InetAddress.getByName("heartofgold.morris.umn.edu");
       int length = 1028;
-      byte buf[] = { };
-      byte buf1[] = new byte[4];
-      DatagramPacket dpOUT = new DatagramPacket(buf, 4, length, address, port);
-      DatagramPacket dpIN = new DatagramPacket(buf1, 4);
+      byte buf[] = new byte[length];
+      DatagramPacket dpOUT = new DatagramPacket(buf, 0, address, port);
+      DatagramPacket dpIN = new DatagramPacket(buf, length);
 
       socket.connect(address, port);
 
       socket.send(dpOUT);
 
       //Make loop for receiving packets - Below is just for now
-      socket.receive(dpIN);
+      //while ( !a1Finished || !a2Finished || !a3Finished) {
+        socket.receive(dpIN);
+        System.out.println(Arrays.toString(dpIN.getData()));
+        //length will help us know if a packetis a header or an end packet
+        System.out.println(new String(buf, 0, dpIN.getLength()));
+    //}
 
 
     }
 
 }
 
-
 public class Process {
+
+boolean a1Finished = false;
+boolean a2Finished = false;
+boolean a3Finished = false;
 
 ArrayList<Integer> A1 = new ArrayList<Integer>();
 ArrayList<Integer> A2 = new ArrayList<Integer>();
 ArrayList<Integer> A3 = new ArrayList<Integer>();
-//if (dpIN.getData() == number thing)
-if (receive )
+
 
 }
