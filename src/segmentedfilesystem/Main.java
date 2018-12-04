@@ -7,7 +7,10 @@ import java.net.DatagramSocket;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Arrays;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Main {
 // https://www.geeksforgeeks.org/java-net-datagramsocket-class-java/
@@ -27,8 +30,12 @@ public class Main {
       socket.send(dpOUT);
 
       //Make loop for receiving packets - Below is just for now
-      //while ( !a1Finished || !a2Finished || !a3Finished) {
+      while ( !file1Complete || !file2Complete || !file3Complete) {
         socket.receive(dpIN);
+        if (!FileIDExists) {
+          new FileHolder dpIN.getData()[1].toString() = new FileHolder((dpIN.getdata()[2]%256) + (dpIN.getData()[3]) , dpIN.getData());
+        }
+      }
         System.out.println(Arrays.toString(dpIN.getData()));
         //length will help us know if a packetis a header or an end packet
         System.out.println(new String(buf, 0, dpIN.getLength()));
@@ -37,24 +44,31 @@ public class Main {
 
     }
 
-public class Process {
+public class FileHolder {
 
-boolean a1Finished = false;
-boolean a2Finished = false;
-boolean a3Finished = false;
+  HashMap<Integer, Array<byte>> hmap = new HashMap<Integer, Array<byte>>();
 
-ArrayList<Integer> A1 = new ArrayList<Integer>();
-ArrayList<Integer> A2 = new ArrayList<Integer>();
-ArrayList<Integer> A3 = new ArrayList<Integer>();
-
-
-//byte arraytest[] = dpIN.getData();
-
-/*switch (dpIN.getData()) {
- case 0:
-
-    break;
-}*/
 }
+
+public class fileIDExists {
+  return;
+}
+
+public class IsFileComplete {
+  boolean file1Complete = false;
+  boolean file2Complete = false;
+  boolean file3Complete = false;
+  //Check that hashmap is finished
+  //Use getLength to check if a packet is last packet
+  //Use last packet's packet number to then see if hashmap is full based on other packet packet number
+  // if (stuff) {
+  boolean file1Complete = true;
+  //if (stuff) {
+  boolean file2Complete = true;
+  //if (stuff) {
+  boolean file3Complete = true;
+
+}
+
 
 }
