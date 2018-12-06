@@ -25,43 +25,64 @@ public class Main {
       DatagramPacket dpOUT = new DatagramPacket(buf, 0, address, port);
       DatagramPacket dpIN = new DatagramPacket(buf, length);
 
+      HashMap<Integer, HashMap<Integer, byte[]>> files = new HashMap<Integer, HashMap<Integer, byte[]>>();
+      HashMap<Integer, byte[]> packetMap = new HashMap<Integer, byte[]>();
+
       socket.connect(address, port);
 
       socket.send(dpOUT);
 
+      boolean file1Complete = false;
+      boolean file2Complete = false;
+      boolean file3Complete = false;
+
+
       //Make loop for receiving packets - Below is just for now
       while ( !file1Complete || !file2Complete || !file3Complete) {
         socket.receive(dpIN);
-        if (!FileIDExists) {
-          new FileHolder dpIN.getData()[1].toString() = new FileHolder((dpIN.getdata()[2]%256) + (dpIN.getData()[3]) , dpIN.getData());
+
+        int fileID = dpIN.getData()[1];
+
+        //add 256 to any neg values
+        //256* HOB + LOB
+
+        int packetNum1, packetNum2;
+        if ( dpIN.getData()[2] < 0) {
+          packetNum1 = dpIN.getData()[2] + 256;
+        } else {
+          packetNum1 = dpIN.getData()[2];
         }
-      }
+
+        if ( dpIN.getData()[3] < 0) {
+          packetNum2 = dpIN.getData()[3] + 256;
+        } else {
+          packetNum2 = dpIN.getData()[3];
+        }
+
+        //if (files.get(fileID) == null) {
+          files.put(fileID, packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
+        //} else {
+          //I don't know yet...
+        //}
+
+        }
+
         System.out.println(Arrays.toString(dpIN.getData()));
         //length will help us know if a packetis a header or an end packet
         System.out.println(new String(buf, 0, dpIN.getLength()));
-    //}
-
 
     }
 
-public class FileHolder {
 
-  HashMap<Integer, Array<byte>> hmap = new HashMap<Integer, Array<byte>>();
-
-}
-
-public class fileIDExists {
-  return;
-}
-
-public class IsFileComplete {
+/*public class IsFileComplete {
   boolean file1Complete = false;
   boolean file2Complete = false;
   boolean file3Complete = false;
   //Check that hashmap is finished
   //Use getLength to check if a packet is last packet
   //Use last packet's packet number to then see if hashmap is full based on other packet packet number
-  // if (stuff) {
+   switch (dpIN.getData()[0]) {
+     case 0:
   boolean file1Complete = true;
   //if (stuff) {
   boolean file2Complete = true;
@@ -71,4 +92,5 @@ public class IsFileComplete {
 }
 
 
+}*/
 }
