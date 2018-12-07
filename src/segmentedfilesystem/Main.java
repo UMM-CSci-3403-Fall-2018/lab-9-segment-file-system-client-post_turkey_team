@@ -25,27 +25,46 @@ public class Main {
       DatagramPacket dpOUT = new DatagramPacket(buf, 0, address, port);
       DatagramPacket dpIN = new DatagramPacket(buf, length);
 
-      HashMap<Integer, HashMap<Integer, byte[]>> files = new HashMap<Integer, HashMap<Integer, byte[]>>();
-      HashMap<Integer, byte[]> packetMap = new HashMap<Integer, byte[]>();
+      HashMap<Integer, byte[]> files = new HashMap<Integer, byte[]>();
+      HashMap<Integer, byte[]> header = new HashMap<Integer, byte[]>();
+      HashMap<Integer, byte[]> finalPacket = new HashMap<Integer, byte[]>();
+      //HashMap<Integer, byte[]> packetMap = new HashMap<Integer, byte[]>();
 
       socket.connect(address, port);
 
       socket.send(dpOUT);
 
-      boolean file1Complete = false;
-      boolean file2Complete = false;
-      boolean file3Complete = false;
+      boolean finalsComplete = false;
+      boolean headersComplete = false;
+      boolean filesComplete = false;
 
+      int counter = 0;
+      int headerCounter = 0;
+      int finalsCounter = 0;
+      int fileID = dpIN.getData()[1];
 
       //Make loop for receiving packets - Below is just for now
-      while ( !file1Complete || !file2Complete || !file3Complete) {
+      while ( counter < 500) {
+      //while ( !file1Complete || !file2Complete || !file3Complete) {
         socket.receive(dpIN);
+        counter++;
 
-        int fileID = dpIN.getData()[1];
+        //if true, we know it's a header packet
+        if (dpIN.getData()[0] % 2 == 0){
+            headerCounter++;
+            header.put(fileID, dpIN.getData());
+            //files.put(fileID, packetMap.put(0, dpIN.getData()));
+        }
 
-        //add 256 to any neg values
-        //256* HOB + LOB
+        //if this case, we know it's the last data packet
+        else if (dpIN.getData()[0] % 4 == 3) {
+          finalsCounter++;
+           finalPacket.put(fileID, dpIN.getData());
+        }
 
+        else {
+
+        //Creating the packet numbers
         int packetNum1, packetNum2;
         if ( dpIN.getData()[2] < 0) {
           packetNum1 = dpIN.getData()[2] + 256;
@@ -60,18 +79,39 @@ public class Main {
         }
 
         //if (files.get(fileID) == null) {
-          files.put(fileID, packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
-        //} else {
-          //I don't know yet...
-        //}
+          //Hashmap test = new Hashmap(packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
+          //files.put(fileID, test);
+
+          files.put(counter, dpIN.getData());
+
+          //files.put(fileID, packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
 
         }
 
-        System.out.println(Arrays.toString(dpIN.getData()));
+          //System.out.println(Arrays.toString((byte[])header.get(fileID)));
+          //System.out.println(Arrays.toString((byte[])files.get(fileID)));
+          //System.out.println(Arrays.toString((byte[])finalPacket.get(fileID)));
+
+          if (headerCounter == 3) {
+            headersComplete = true;
+          }
+
+          if (finalsCounter == 2) {
+            finalsComplete = true;
+          }
+
+          if (finalPacket.get(fileID) == files.get(fileID) && finalPacket.get(packetNum1 + packetNum2)
+
+        }
+
+        //System.out.println(Arrays.toString(dpIN.getData()));
         //length will help us know if a packetis a header or an end packet
-        System.out.println(new String(buf, 0, dpIN.getLength()));
+        //System.out.println(new String(buf, 0, dpIN.getLength()));
 
     }
+  }
+
+
 
 
 /*public class IsFileComplete {
@@ -93,4 +133,3 @@ public class Main {
 
 
 }*/
-}
