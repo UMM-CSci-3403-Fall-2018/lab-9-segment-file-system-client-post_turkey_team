@@ -43,9 +43,9 @@ public class Main {
       int finalsCounter = 0;
       int fileID = dpIN.getData()[1];
 
-      //Make loop for receiving packets - Below is just for now
-      while ( counter < 500) {
+      //Make loop for receiving packets
       //while ( !file1Complete || !file2Complete || !file3Complete) {
+      while (counter < 500) {
         socket.receive(dpIN);
         counter++;
 
@@ -53,7 +53,6 @@ public class Main {
         if (dpIN.getData()[0] % 2 == 0){
             headerCounter++;
             header.put(fileID, dpIN.getData());
-            //files.put(fileID, packetMap.put(0, dpIN.getData()));
         }
 
         //if this case, we know it's the last data packet
@@ -78,13 +77,7 @@ public class Main {
           packetNum2 = dpIN.getData()[3];
         }
 
-        //if (files.get(fileID) == null) {
-          //Hashmap test = new Hashmap(packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
-          //files.put(fileID, test);
-
           files.put(counter, dpIN.getData());
-
-          //files.put(fileID, packetMap.put(((256 * packetNum1) + packetNum2), dpIN.getData()));
 
         }
 
@@ -100,7 +93,9 @@ public class Main {
             finalsComplete = true;
           }
 
-          if (finalPacket.get(fileID) == files.get(fileID) && finalPacket.get(packetNum1 + packetNum2)
+          // if (finalPacket.get(fileID) == files.get(counter.dpIN.getData()[1]) && files.size() == finalPacket.get(packetNum1 + packetNum2)) {
+          // filesComplete = true;
+        //}
 
         }
 
@@ -110,9 +105,6 @@ public class Main {
 
     }
   }
-
-
-
 
 /*public class IsFileComplete {
   boolean file1Complete = false;
